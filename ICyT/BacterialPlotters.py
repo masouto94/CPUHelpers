@@ -59,6 +59,14 @@ class BacterialGrowthPlot():
 	# 	print(f'Con una poblacion incial de {poblacion_inicial} bacterias, luego de {tiempo_transcurrido} unidades de tiempo tenemos {poblacion_t} bacterias')
 	# 	return
 
+	def graficar_crecimiento(self, tiempo_transcurrido:float , poblacion:int =100):
+		tiempo ,poblacion_t = self.dominio_imagen(tiempo_transcurrido, poblacion)
+		self.graficar(tiempo, poblacion_t)
+		print(f'La poblacion en t=0 es {poblacion}')
+		print(f'La poblacion en t={tiempo_transcurrido} es {poblacion_t[-1]}')
+		plt.show()
+		return
+	
 	def graficar_crecimiento_simple(self) -> None:
 		tiempo_transcurrido = self.carga_valor()
 		tiempo ,poblacion_t = self.dominio_imagen(tiempo_transcurrido)
@@ -78,19 +86,28 @@ class BacterialGrowthPlot():
 		return
 
 class CellCyclePlot():
-	def __init__(self) -> None:
+	def __init__(self,**kwargs) -> None:
 		"""
 		Clase para graficar crecimiento celular. Inicializa las siguientes variables en default:
 
-		self.r = 0.1
-		self.K = 1000
-		self.N0 = 10
-		self.t0 = 0
-		self.tiempo_lag_max = 20
-		self.tiempo_exp_max = 100
-		self.tiempo_meseta_max = 200
-		self.tiempo_dead_max = 250
-		self.pasos = 100
+		r = 0.1
+
+		K = 1000
+
+		N0 = 10
+
+		t0 = 0
+
+		tiempo_lag_max = 20
+
+		tiempo_exp_max = 100
+
+		tiempo_meseta_max = 200
+
+		tiempo_dead_max = 250
+
+		pasos = 100
+
 
 		Se pueden modificar directamente: ej `self.N0 = 1234` setea ese valor para el objeto
 		"""
@@ -105,9 +122,23 @@ class CellCyclePlot():
 		self.tiempo_meseta_max = 200
 		self.tiempo_dead_max = 250
 		self.pasos = 100
+		self.setear_atributos_custom(kwargs)
+		
 
-		# Definir la ecuación diferencial del crecimiento bacteriano logístico
-	def crecimiento_bacteriano_logistico(self,N, t):
+	def parametros(self):
+		return list(self.__dict__.keys())
+	
+	def setear_atributos_custom(self,kwargs):
+		allowed = set(self.__dict__.keys())
+		kwargs_keys = set(kwargs.keys())
+		if kwargs_keys.issubset(allowed):
+			self.__dict__.update(kwargs)
+			return
+		raise KeyError(f"{kwargs_keys.difference(allowed)} no son claves permitidas. Solo se pueden setear {allowed}")
+
+	
+	# Definir la ecuación diferencial del crecimiento bacteriano logístico
+	def crecimiento_bacteriano_logistico(self,N,t):
 			dNdt = self.r * N * (1 - (N / self.K))
 			return dNdt
 
@@ -130,9 +161,9 @@ class CellCyclePlot():
 
 		self.base_grafico(dominio, imagen)
 		#Lineas adicionales
-		plt.vlines(dominio_tiempo_lag[-1], color="red", ymin=5, ymax=1000, linestyle='dashed')
-		plt.vlines(dominio_tiempo_exp[-1], color="red", ymin=5, ymax=1000, linestyle='dashed')
-		plt.vlines(dominio_tiempo_meseta[-1], color="red", ymin=5, ymax=1000, linestyle='dashed')
+		plt.vlines(dominio_tiempo_lag[-1], color="red", ymin=5, ymax=self.K, linestyle='dashed')
+		plt.vlines(dominio_tiempo_exp[-1], color="red", ymin=5, ymax=self.K, linestyle='dashed')
+		plt.vlines(dominio_tiempo_meseta[-1], color="red", ymin=5, ymax=self.K, linestyle='dashed')
 		plt.show()
 		return
 
