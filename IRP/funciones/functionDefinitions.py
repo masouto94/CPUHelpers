@@ -50,3 +50,7 @@ def ejemplo_5_d(x):
 @not_function        
 def ejemplo_5_e(x):
     return 6/ (3 - (sqrt(x-2)))
+
+@not_function        
+def pregunta_5(x):
+    return sqrt(-2*x+9)

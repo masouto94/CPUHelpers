@@ -53,6 +53,7 @@ print(f"-10 esta dentro del dominio de la func?",-13 in dominio_ejemplo_5_d)
 dominio_ejemplo_5_e=continuous_domain(ejemplo_5_e(x),x,S.Reals)
 print("dominio_ejemplo_5_e",dominio_ejemplo_5_e)
 print(f"1 esta dentro del dominio de la func?",-13 in dominio_ejemplo_5_b)
+print("#"*10)
 
 print("Ejemplo 7")
 print("#"*10)
@@ -61,4 +62,18 @@ print("#"*10)
 print(conjuntos(ejemplo_4, x))
 #se puede probar con otros...
 print(conjuntos(ejemplo_5_c, x))
+print("#"*10)
+
+print("Pregunta 5")
+print("#"*10)
+dominio_pregunta_5=continuous_domain(pregunta_5(x),x,S.Reals)
+print("dominio_pregunta_5",dominio_pregunta_5)
+print(f"1 esta dentro del dominio de la func?",-13 in dominio_pregunta_5)
+print("#"*10)
+
+print("Pregunta 6")
+print("#"*10)
+print(conjuntos(pregunta_5, x))
+#Es el C0 mas el punto de corte en y que es f(0) = 3
+print(pregunta_5(0))
 print("#"*10)
