@@ -1,3 +1,8 @@
+from fisica import kmh_a_ms
+print()
+print(kmh_a_ms(61)/8)
+#MRUV
+
 gabriel = 3
 florencia = 2
 mts_gabriel = 10
