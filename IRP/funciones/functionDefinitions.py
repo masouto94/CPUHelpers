@@ -54,3 +54,29 @@ def ejemplo_5_e(x):
 @not_function        
 def pregunta_5(x):
     return sqrt(-2*x+9)
+
+@not_function        
+def examen_3a(x):
+    return pow(x,2)+7*x+12
+
+@not_function        
+def examen_3b(x):
+    return -4*x+28
+
+
+@not_function        
+def examen_4a(x):
+    return 3*x+10
+
+@not_function        
+def examen_4b(x):
+    return 7*(x**2)-(21*x)
+
+
+
+x = Symbol('x')
+
+print(conjuntos(examen_3a,x))
+print(examen_3a(2))
+
+print(conjuntos(examen_3b,x))
