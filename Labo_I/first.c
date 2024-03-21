@@ -1,6 +1,6 @@
 #include <stdio.h>
 int main() {
-   printf("AGUANTE CHACAd\n");
+   printf("HOLA MUNDO\n");
    printf("JAJAJJA\n");
    char lala = 'f';
    printf("el char es %c", lala);

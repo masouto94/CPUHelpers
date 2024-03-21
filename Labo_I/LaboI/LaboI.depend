@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1711061141 source:/home/matias/Documents/misRepos/CPUHelpers/Labo_I/clase_2/scanFInputs.c
+	<stdio.h>
+
+1711062323 source:/home/matias/Documents/misRepos/CPUHelpers/Labo_I/clase_2/variables.c
+	<stdio.h>
+
