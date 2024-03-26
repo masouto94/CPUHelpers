@@ -39,7 +39,7 @@ import bisect
   
 def search_binary_bisect(array, item):
     index_to_insert = bisect.bisect_left(array, item)
-    if index_to_insert <= len(array) and array[index_to_insert] == item:
+    if index_to_insert < len(array) and array[index_to_insert] == item:
         return index_to_insert
     else:
         return -1
