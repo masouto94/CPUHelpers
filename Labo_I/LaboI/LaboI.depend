@@ -1,0 +1,34 @@
+# depslib dependency file v1.0
+1711427914 source:c:\users\masou\dev\cpuhelpers\labo_i\labo-1-c\ejercicios\0.hola_mundo\main.cpp
+	<stdio.h>
+	<iostream>
+
+1711484939 source:c:\users\masou\dev\cpuhelpers\labo_i\labo-1-c\ejercicios\1.entrada_salida\inputoutput.cpp
+	<stdio.h>
+	<iostream>
+
+1711559496 source:c:\users\masou\dev\cpuhelpers\labo_i\labo-1-c\ejercicios\0.hola_mundo\helloworld.h
+	<stdio.h>
+	<iostream>
+
+1711559636 source:c:\users\masou\dev\cpuhelpers\labo_i\labo-1-c\ejercicios\1.entrada_salida\ejercicio_1.h
+	<stdio.h>
+	<iostream>
+
+1711559698 source:c:\users\masou\dev\cpuhelpers\labo_i\labo-1-c\ejercicios\main.cpp
+	<stdio.h>
+	<iostream>
+	"1.Entrada_salida/Ejercicio_1.h"
+	"1.Entrada_salida/Ejercicio_2.h"
+	"0.Hola_mundo/HelloWorld.h"
+
+1711559636 c:\users\masou\dev\cpuhelpers\labo_i\labo-1-c\ejercicios\1.entrada_salida\ejercicio_1.h
+	<stdio.h>
+	<iostream>
+
+1711559999 c:\users\masou\dev\cpuhelpers\labo_i\labo-1-c\ejercicios\1.entrada_salida\ejercicio_2.h
+
+1711559496 c:\users\masou\dev\cpuhelpers\labo_i\labo-1-c\ejercicios\0.hola_mundo\helloworld.h
+	<stdio.h>
+	<iostream>
+
