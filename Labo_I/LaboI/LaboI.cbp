@@ -33,6 +33,9 @@
 		</Compiler>
 		<Unit filename="../Labo-1-C/Ejercicios/0.Hola_mundo/HelloWorld.h" />
 		<Unit filename="../Labo-1-C/Ejercicios/1.Entrada_salida/Ejercicio_1.h" />
+		<Unit filename="../Labo-1-C/Ejercicios/1.Entrada_salida/Ejercicio_15.h" />
+		<Unit filename="../Labo-1-C/Ejercicios/1.Entrada_salida/Ejercicio_16.h" />
+		<Unit filename="../Labo-1-C/Ejercicios/1.Entrada_salida/Ejercicio_19.h" />
 		<Unit filename="../Labo-1-C/Ejercicios/1.Entrada_salida/Ejercicio_2.h" />
 		<Unit filename="../Labo-1-C/Ejercicios/1.Entrada_salida/README.md" />
 		<Unit filename="../Labo-1-C/Ejercicios/2.Operaciones/README.md" />
