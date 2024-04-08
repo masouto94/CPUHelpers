@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1712553062 source:c:\users\masou\dev\cpuhelpers\labo_i\blackjack\main.cpp
+	"Structs/deck.h"
+
+1712553363 c:\users\masou\dev\cpuhelpers\labo_i\blackjack\structs\deck.h
+	<stdio.h>
+	<string>
+	<iostream>
+
