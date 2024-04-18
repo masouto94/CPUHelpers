@@ -32,3 +32,137 @@
 	<stdio.h>
 	<iostream>
 
+1713397681 source:/home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Ejercicios/Main.cpp
+	<stdio.h>
+	<iostream>
+	"1.Entrada_salida/Ejercicio_1.h"
+	"1.Entrada_salida/Ejercicio_15.h"
+	"1.Entrada_salida/Ejercicio_16.h"
+	"1.Entrada_salida/Ejercicio_19.h"
+	"1.Entrada_salida/Ejercicio_2.h"
+	"1.Entrada_salida/Ejercicio_6.h"
+	"1.Entrada_salida/Ejercicio_7.h"
+	"0.Hola_mundo/HelloWorld.h"
+	"0.Hola_mundo/PruebaParams.h"
+	"../Clase_03/ceil.h"
+	"../Clase_03/Ej_20.h"
+	"../Clase_03/ej_char1.h"
+	"../Clase_03/ej_char2.h"
+	"../Clase_03/floor.h"
+	"../Clase_03/fmod.h"
+	"../Clase_06/do_while_loop.h"
+	"../Clase_06/ejemplo_while_con_centinela.h"
+	"../Clase_06/ejemplo-de-for.h"
+	"../Clase_06/for_loop.h"
+	"../Clase_06/while_1.h"
+	"../Clase_06/while_2.h"
+	"../Clase_06/while_loop.h"
+	"../Clase_06/switch_con_while.h"
+	"../Clase_07/Ciclos_anidados.h"
+	"../Clase_07/Ciclos_anidados_dependiente.h"
+	"../Clase_07/Comparar.h"
+	"../Clase_07/Ej_19.h"
+	"../Clase_07/Get_Cadena.h"
+	"../Clase_07/Jeringozo.h"
+	"../Clase_07/Recorrer_Cadena_for.h"
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Ejercicios/1.Entrada_salida/Ejercicio_1.h
+	<stdio.h>
+	<iostream>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Ejercicios/1.Entrada_salida/Ejercicio_15.h
+	<stdio.h>
+	<iostream>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Ejercicios/1.Entrada_salida/Ejercicio_16.h
+	<stdio.h>
+	<iostream>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Ejercicios/1.Entrada_salida/Ejercicio_19.h
+	<stdio.h>
+	<math.h>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Ejercicios/1.Entrada_salida/Ejercicio_2.h
+	<stdio.h>
+	<iostream>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Ejercicios/1.Entrada_salida/Ejercicio_6.h
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Ejercicios/1.Entrada_salida/Ejercicio_7.h
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Ejercicios/0.Hola_mundo/HelloWorld.h
+	<stdio.h>
+	<iostream>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Ejercicios/0.Hola_mundo/PruebaParams.h
+	<stdio.h>
+	<iostream>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_03/ceil.h
+	<stdio.h>
+	<math.h>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_03/Ej_20.h
+	<stdio.h>
+	<math.h>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_03/ej_char1.h
+	<stdio.h>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_03/ej_char2.h
+	<stdio.h>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_03/floor.h
+	<stdio.h>
+	<math.h>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_03/fmod.h
+	<stdio.h>
+	<math.h>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_06/do_while_loop.h
+	<stdio.h>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_06/ejemplo_while_con_centinela.h
+	<stdio.h>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_06/ejemplo-de-for.h
+	<stdio.h>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_06/for_loop.h
+	<stdio.h>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_06/while_1.h
+	<stdio.h>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_06/while_2.h
+	<stdio.h>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_06/while_loop.h
+	<stdio.h>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_06/switch_con_while.h
+	<stdio.h>
+	<iostream>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_07/Ciclos_anidados.h
+	<stdio.h>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_07/Ciclos_anidados_dependiente.h
+	<stdio.h>
+
+1713381014 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_07/Comparar.h
+	<stdio.h>
+
+1713381014 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_07/Ej_19.h
+	<stdio.h>
+
+1713397793 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_07/Get_Cadena.h
+	<stdio.h>
+
+1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_07/Jeringozo.h
+	<stdio.h>
+
+1713394476 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Clase_07/Recorrer_Cadena_for.h
+	<stdio.h>
+
