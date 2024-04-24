@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1713992921 source:/home/matias/Documents/misRepos/CPUHelpers/Labo_I/LaboII/Main.cpp
+	<stdio.h>
+	<iostream>
+	<map>
+
