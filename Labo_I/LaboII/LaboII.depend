@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1713992921 source:/home/matias/Documents/misRepos/CPUHelpers/Labo_I/LaboII/Main.cpp
-	<stdio.h>
-	<iostream>
-	<map>
+1714051485 source:/home/matias/Documents/misRepos/CPUHelpers/Labo_I/LaboII/Main.cpp
+	"../Labo-1-C/Parciales/notas.h"
+	"../Labo-1-C/Parciales/piedraPapelTijera.h"
+	"../Labo-1-C/Parciales/letterSwapper.h"
 
 1714013213 source:c:\users\masou\dev\cpuhelpers\labo_i\laboii\main.cpp
 	"../Labo-1-C/Parciales/notas.h"
@@ -18,4 +18,19 @@
 	<stdlib.h>
 	<time.h>
 	<map>
+
+1714050353 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Parciales/notas.h
+	<stdio.h>
+	<iostream>
+	<map>
+
+1714050952 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Parciales/piedraPapelTijera.h
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<map>
+
+1714054524 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Parciales/letterSwapper.h
+	<stdio.h>
+	<iostream>
 
