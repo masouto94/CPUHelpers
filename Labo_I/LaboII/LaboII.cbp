@@ -32,6 +32,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../Labo-1-C/Parciales/letterSwapper.h" />
 		<Unit filename="../Labo-1-C/Parciales/notas.h" />
 		<Unit filename="../Labo-1-C/Parciales/piedraPapelTijera.h" />
 		<Unit filename="Main.cpp" />
