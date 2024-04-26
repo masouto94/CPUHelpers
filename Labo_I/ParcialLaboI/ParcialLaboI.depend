@@ -1,0 +1,23 @@
+# depslib dependency file v1.0
+1714091653 source:/home/matias/Documents/misRepos/CPUHelpers/Labo_I/ParcialLaboI/Main.cpp
+	<stdio.h>
+	"Ejercicio_1.h"
+	"Ejercicio_2.h"
+	"Ejercicio_3.h"
+
+1714091758 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/ParcialLaboI/Ejercicio_1.h
+	<stdio.h>
+	<iostream>
+
+1714089354 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/ParcialLaboI/Ejercicio_2.h
+	<stdio.h>
+	<iostream>
+	<stdlib.h>
+	<time.h>
+	<chrono>
+	<thread>
+
+1714087555 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/ParcialLaboI/Ejercicio_3.h
+	<stdio.h>
+	<iostream>
+

@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <iostream>
+
+//
+//Escribir un programa que lea una cadena de caracteres (máximo 100 caracteres) y reemplace todas las apariciones de una letra especificada por el usuario con otra letra especificada por el usuario.
+//
+//El programa debe solicitar al usuario la letra a buscar y la letra con la que se debe reemplazar, y luego mostrar la cadena resultante por pantalla.
+//
+//No se puede utilizar la biblioteca String.
+//
+//Ejemplo de entrada:
+//
+//“Ingrese una cadena de caracteres:”
+//
+//Esta es una oración de prueba
+//
+//“Ingrese la letra que desea buscar:”
+//
+//a
+//
+//“Ingrese la letra con la que se debe reemplazar:”
+//
+//J
+//
+//“La cadena resultante es: EstJ es unJ orJción de pruebJ”
+
+char replaceChar(char source, char target, char replacement){
+    if (source == target){
+        return replacement;
+    }
+    return source;
+}
+
+int Ejercicio_3(){
+    char inputString[100];
+    char outputString[100];
+    char searchChar;
+    char targetChar;
+    printf("Ingrese una cadena de caracteres\n");
+    gets(inputString);
+    printf("Ingrese la letra a buscar\n");
+    //scanf("%c", &searchChar);
+    std::cin >> searchChar;
+    printf("Ingrese la letra de reemplazo\n");
+    //scanf("%c", &targetChar);
+    std::cin >> targetChar;
+    for (int i=0; inputString[i] != '\0'; i++){
+        outputString[i] = replaceChar(inputString[i],searchChar,targetChar);
+    }
+    printf("La cadena transformada es:\n");
+    printf("%s", outputString);
+    return 0;
+}
