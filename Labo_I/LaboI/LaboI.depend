@@ -32,7 +32,7 @@
 	<stdio.h>
 	<iostream>
 
-1713397681 source:/home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Ejercicios/Main.cpp
+1714050353 source:/home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Ejercicios/Main.cpp
 	<stdio.h>
 	<iostream>
 	"1.Entrada_salida/Ejercicio_1.h"
@@ -90,9 +90,13 @@
 
 1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Ejercicios/1.Entrada_salida/Ejercicio_7.h
 
-1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Ejercicios/0.Hola_mundo/HelloWorld.h
+1717188767 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Ejercicios/0.Hola_mundo/HelloWorld.h
 	<stdio.h>
 	<iostream>
+	<stdlib.h>
+	<time.h>
+	<array>
+	<vector>
 
 1713377984 /home/matias/Documents/misRepos/CPUHelpers/Labo_I/Labo-1-C/Ejercicios/0.Hola_mundo/PruebaParams.h
 	<stdio.h>
