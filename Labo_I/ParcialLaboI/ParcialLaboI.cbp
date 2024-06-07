@@ -31,10 +31,13 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../ArduinoProjects/secretCodeProject/colors.h" />
+		<Unit filename="../ArduinoProjects/secretCodeProject/secretCode.h" />
 		<Unit filename="Ejercicio_1.h" />
 		<Unit filename="Ejercicio_2.h" />
 		<Unit filename="Ejercicio_3.h" />
 		<Unit filename="Main.cpp" />
+		<Unit filename="codigoSecreto.h" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>
