@@ -4,32 +4,35 @@ class RGBColor{
         int red;
         int green;
         int blue;
-
-        RGBColor();
-        RGBColor(int redValue, int greenValue, int blueValue)
-        : red(redValue), green(greenValue),blue(blueValue)
+        char* name;
+        RGBColor() {};
+        RGBColor(int redValue, int greenValue, int blueValue, char* colorName)
+        : red(redValue), green(greenValue),blue(blueValue), name(colorName)
         {}
     };
 
-class ColorFactory{
+class ColorFactory {
   //Funciones que retornan el color en rgb
-  public:
-  static RGBColor Yellow(){
-    return RGBColor(255, 235, 59);
+public:
+  static class RGBColor Yellow() {
+    return RGBColor(255, 235, 59, "Yellow");
   }
-   static RGBColor White(){
-    return RGBColor(250, 250, 250);
+  static class RGBColor White() {
+    return RGBColor(250, 250, 250, "White");
   }
-   static RGBColor Orange(){
-    return RGBColor(245, 127, 23);
+  static class RGBColor Orange() {
+    return RGBColor(245, 127, 23, "Orange");
   }
-   static RGBColor Green(){
-    return RGBColor(0, 77, 64);
+  static class RGBColor Green() {
+    return RGBColor(0, 255, 0, "Green");
   }
-  static RGBColor Blue(){
-    return RGBColor(74, 20, 140);
+  static class RGBColor Blue() {
+    return RGBColor(0, 0, 255, "Blue");
   }
-  static RGBColor Red(){
-    return RGBColor(183, 28, 28);
-   }
+  static class RGBColor Red() {
+    return RGBColor(255, 0, 0, "Red");
+  }
+  static class RGBColor Violet() {
+    return RGBColor(120, 40, 140, "Violet");
+  }
 };
