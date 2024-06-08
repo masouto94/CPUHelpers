@@ -3,10 +3,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "../ArduinoProjects/secretCodeProject/colors.h"
+#include "colors.h"
 #define CANT_COLORES 4
 #define MAX_INTENTOS 3
-#define DEBUG
+#define DEBUG // Para que se impriman por pantalla los resultados, y para poder ingresar valores por consola
 
 //std::srand(std::time(NULL));
 
@@ -26,6 +26,53 @@ typedef enum {
   POSICION_INCORRECTA,
   INCORRECTO
 } resultado_t;
+
+
+void mostrar_colores(RGBColor colores[]) {
+    putchar('[');
+    for (size_t i = 0; i < CANT_COLORES; i++) {
+        if(colores[i].name.compare("Yellow") == 0) {
+            printf("Amarillo");
+        } else if(colores[i].name.compare("White") == 0) {
+            printf("Blanco");
+        } else if(colores[i].name.compare("Orange") == 0) {
+            printf("Naranja");
+        } else if(colores[i].name.compare("Green") == 0) {
+            printf("Verde");
+        } else if(colores[i].name.compare("Blue") == 0) {
+            printf("Azul");
+        } else if(colores[i].name.compare("Red") == 0) {
+            printf("Rojo");
+        } else if(colores[i].name.compare("Violet") == 0) {
+            printf("Violeta");
+        } else {
+            printf("ERROR");
+        }
+        printf("%s", i != CANT_COLORES - 1 ? ", " : "]");
+    }
+}
+
+void mostrar_resultado(resultado_t resultado[]) {
+  for (size_t i = 0; i < CANT_COLORES; i++) {
+    /*
+    Serial.print("Resultado para el color ");
+    Serial.print(i);
+    Serial.print(": ");
+    */
+    switch (resultado[i]) {
+      case CORRECTO:
+        printf("O");
+        break;
+      case POSICION_INCORRECTA:
+        printf("X");
+        break;
+      case INCORRECTO:
+        printf("-");
+        break;
+    }
+  }
+}
+
 
 
 class SecretCode{
@@ -54,9 +101,13 @@ class SecretCode{
             }
           }
 
-        static void verificar_aciertos(RGBColor colores_a_adivinar[], RGBColor colores_ingresados[], resultado_t resultado[]) {
-         resultado_t flags[CANT_COLORES] = {INCORRECTO, INCORRECTO, INCORRECTO};
-
+        /*
+        Compara los colores ingresados con los colores a adivinar y devuelve por parametro un array con el estado de cada uno.
+        'resultado' tiene que tener espacio para CANT_COLORES elementos.
+        */
+        static void verificar_aciertos(RGBColor colores_a_adivinar[], RGBColor colores_ingresados[], resultado_t *resultado) {
+          resultado_t flags[CANT_COLORES] = {INCORRECTO, INCORRECTO, INCORRECTO};
+          
           // Primera recorrida para chequear los colores que estan en la posicion correcta
           for(size_t i = 0; i < CANT_COLORES; i++) {
             if(colores_ingresados[i].name == colores_a_adivinar[i].name) {
@@ -83,51 +134,8 @@ class SecretCode{
               }
             }
           }
-
-
-      };
-};
-/*
-
-void verificar_aciertos(RGBColor colores_a_adivinar[], RGBColor colores_ingresados[], resultado_t *resultado);
-bool verificar_victoria(resultado_t resultado[]);
-void mostrar_resultado(resultado_t resultado[]);
-*/
-
-/*
-Compara los colores ingresados con los colores a adivinar y devuelve por parametro un array con el estado de cada uno.
-'resultado' tiene que tener espacio para CANT_COLORES elementos.
-*/
-void verificar_aciertos(RGBColor colores_a_adivinar[], RGBColor colores_ingresados[], resultado_t *resultado) {
-  resultado_t flags[CANT_COLORES] = {INCORRECTO, INCORRECTO, INCORRECTO};
-
-  // Primera recorrida para chequear los colores que estan en la posicion correcta
-  for(size_t i = 0; i < CANT_COLORES; i++) {
-    if(colores_ingresados[i].name == colores_a_adivinar[i].name) {
-      resultado[i] = CORRECTO;
-    } else {
-      resultado[i] = INCORRECTO; // Cargo INCORRECTO por defecto para evitar valores basura
-    }
-  }
-
-  // Segunda recorrida para chequear los colores que estan en una posicion incorrecta
-  for (size_t cont_input = 0; cont_input < CANT_COLORES; cont_input++) {
-    if(resultado[cont_input] != CORRECTO) {
-      for (size_t cont_respuesta = 0; cont_respuesta < CANT_COLORES; cont_respuesta++) {
-        if (flags[cont_respuesta] != POSICION_INCORRECTA &&
-                resultado[cont_input] != POSICION_INCORRECTA &&
-                resultado[cont_respuesta] != CORRECTO) {
-
-          if(colores_a_adivinar[cont_respuesta].name == colores_ingresados[cont_input].name) {
-            flags[cont_respuesta] = POSICION_INCORRECTA;
-            resultado[cont_input] = POSICION_INCORRECTA;
-            break;
-          }
         }
-      }
-    }
-  }
-}
+    };
 
 // Devuelve true si el jugador acertó todos los colores, y false en caso contrario
 bool verificar_victoria(resultado_t resultado[]) {
@@ -137,51 +145,6 @@ bool verificar_victoria(resultado_t resultado[]) {
     }
   }
   return true;
-}
-
-void mostrar_colores(RGBColor colores[]) {
-    putchar('[');
-    for (size_t i = 0; i < CANT_COLORES; i++) {
-        if(colores[i].name == "Yellow") {
-            printf("Amarillo");
-        } else if(colores[i].name == "White") {
-            printf("Blanco");
-        } else if(colores[i].name == "Orange") {
-            printf("Naranja");
-        } else if(colores[i].name == "Green") {
-            printf("Verde");
-        } else if(colores[i].name == "Blue") {
-            printf("Azul");
-        } else if(colores[i].name == "Red") {
-            printf("Rojo");
-        } else if(colores[i].name == "Violet") {
-            printf("Violeta");
-        } else {
-            printf("fdsjhfs");
-        }
-        printf("%s", i != CANT_COLORES - 1 ? ", " : "]");
-    }
-}
-
-void mostrar_resultado(resultado_t resultado[]) {
-  for (size_t i = 0; i < CANT_COLORES; i++) {
-    /*
-    Serial.print("Resultado para el color ");
-    Serial.print(i);
-    Serial.print(": ");
-    */
-    switch (resultado[i]) {
-      case CORRECTO:
-        printf("O");
-        break;
-      case POSICION_INCORRECTA:
-        printf("X");
-        break;
-      case INCORRECTO:
-        printf("-");
-        break;
-    }
-  }
 }
 
 // TODO: Adaptar a Arduino (digitalRead, pasar cosas a loop y setup, etc)
@@ -202,9 +165,6 @@ void comenzar_juego() {
     SecretCode juegoMaquina = SecretCode();
     SecretCode juegoJugador = SecretCode(userSecretCode);
 
-    resultado_t resultado[4];
-
-    SecretCode::verificar_aciertos(juegoMaquina.code, juegoJugador.code, resultado);
 #ifdef DEBUG
     printf("La respuesta es: ");
     mostrar_colores(juegoMaquina.code);
@@ -220,10 +180,10 @@ void comenzar_juego() {
 
         // TODO Leer combinacion de colores
 #ifdef DEBUG
-        printf("0 - AMARILLO\n1 - BLANCO\n2 - NARANJA\n3 - VERDE\n4 - AZUL\n5 - ROJO\n6- VIOLETA\n");
+        printf("0 - AMARILLO\n1 - BLANCO\n2 - NARANJA\n3 - VERDE\n4 - AZUL\n5 - ROJO\n6 - VIOLETA\n");
         for (size_t i = 0; i < CANT_COLORES; i++) {
-            colores_t opcion;
-            scanf("%d", &opcion);
+            int opcion;
+            scanf(" %d", &opcion);
             if(opcion == AMARILLO) {
                 userSecretCode[i] = ColorFactory::Yellow();
             } else if(opcion == BLANCO) {
@@ -240,13 +200,16 @@ void comenzar_juego() {
                 userSecretCode[i] = ColorFactory::Violet();
             }
         }
+        printf("Elegiste: \n");
+        mostrar_colores(userSecretCode);
+        putchar('\n');
 #endif
         // analogRead(.....);
 
 
         // Se compara esa combinacion con los colores a adivinar
         resultado_t resultado[CANT_COLORES];
-        verificar_aciertos(juegoMaquina.code, juegoJugador.code, resultado);
+        SecretCode::verificar_aciertos(juegoMaquina.code, userSecretCode, resultado);
 
 #ifdef DEBUG
         mostrar_resultado(resultado);
