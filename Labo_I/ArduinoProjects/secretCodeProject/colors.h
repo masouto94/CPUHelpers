@@ -1,12 +1,16 @@
+#include <string>
+
+using namespace std;
+
 class RGBColor{
 
     public:
         int red;
         int green;
         int blue;
-        char* name;
+        string name;
         RGBColor() {};
-        RGBColor(int redValue, int greenValue, int blueValue, char* colorName)
+        RGBColor(int redValue, int greenValue, int blueValue, string colorName)
         : red(redValue), green(greenValue),blue(blueValue), name(colorName)
         {}
     };
