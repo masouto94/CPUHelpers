@@ -30,19 +30,19 @@ typedef enum {
 void mostrar_colores(RGBColor colores[]) {
     putchar('[');
     for (size_t i = 0; i < CANT_COLORES; i++) {
-        if(colores[i].name.compare("Yellow") == 0) {
+        if(colores[i].name.compareTo("Yellow") == 0) {
             printf("Amarillo");
-        } else if(colores[i].name.compare("White") == 0) {
+        } else if(colores[i].name.compareTo("White") == 0) {
             printf("Blanco");
-        } else if(colores[i].name.compare("Orange") == 0) {
+        } else if(colores[i].name.compareTo("Orange") == 0) {
             printf("Naranja");
-        } else if(colores[i].name.compare("Green") == 0) {
+        } else if(colores[i].name.compareTo("Green") == 0) {
             printf("Verde");
-        } else if(colores[i].name.compare("Blue") == 0) {
+        } else if(colores[i].name.compareTo("Blue") == 0) {
             printf("Azul");
-        } else if(colores[i].name.compare("Red") == 0) {
+        } else if(colores[i].name.compareTo("Red") == 0) {
             printf("Rojo");
-        } else if(colores[i].name.compare("Violet") == 0) {
+        } else if(colores[i].name.compareTo("Violet") == 0) {
             printf("Violeta");
         } else {
             printf("ERROR");
@@ -228,17 +228,4 @@ void comenzar_juego() {
         mostrar_colores(juegoMaquina.code);
         putchar('\n');
     }
-}
-
-
-
-
-void setup()
-{
-
-}
-
-void loop()
-{
-
 }

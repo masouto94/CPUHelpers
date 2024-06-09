@@ -1,6 +1,6 @@
 #include <LiquidCrystal_I2C.h>
 #include "codigoSecreto.h"
-#include "colors.h"
+// #include "colors.h"
 #include "music.h"
 #define BLUEPIN 9
 #define REDPIN 10
@@ -26,7 +26,7 @@
 
 int estadoActual = ESTADO_INICIO;
 
-char* selectedColor = "";
+String selectedColor = "";
 int selectorIndex = 0;
 int estadoBotonAdelAnterior =LOW;
 int estadoBotonAtrasAnterior =LOW;
@@ -34,7 +34,7 @@ unsigned long  millisBOTONADEL = 0;
 unsigned long  millisBOTONATRAS = 0;
 
 LiquidCrystal_I2C pantalla(0x27, 16, 2);  //para el display PCF8574 (consultar si es este el que vamso a usar).
-
+/*
 class RGBColor {
   // El objeto RGBColor tiene los valores de red green y blue.
 public:
@@ -100,7 +100,7 @@ class SecretCode{
             }
           }
 };
-
+*/
 //Crea la lista de colores del usuario
 RGBColor userCode[4];
 //Si estamos en estado inicio creamos el secretcode
@@ -114,23 +114,20 @@ void setEstado(int estado){
 }
 
 
-//FIXME: No me anda acá pero si en CodeBlocks
-char* normalizeColor(char* color){
+String normalizeColor(String color){
   	int counter = 0;
-    char normalized[8];
+    String normalized;
     for (size_t i = 0; color[i] != 0; i++){
     	counter++;
-      	normalized[i] = color[i];
+      	normalized += color[i];
       if(counter == 8){
-        char* normalizedColor = normalized;
-        return normalizedColor;
+         return normalized;
       };
     };
     for(int i=counter; i <8; i++){
-      normalized[i]=' ';
+      normalized +=' ';
       };
-    char* normalizedColor = normalized;
-    return normalizedColor;
+     return normalized;
 };
 
 void setColor(RGBColor& color) {
@@ -139,9 +136,7 @@ void setColor(RGBColor& color) {
   analogWrite(BLUEPIN, color.blue);
   if(selectedColor != color.name){
   selectedColor = color.name;
-    pantalla.print(selectedColor);
-    //no puedo normalizar el color
-    //Serial.println(normalizeColor(color.name));
+    pantalla.print(normalizeColor(selectedColor));
     userCode[selectorIndex] = color;
     calculateCursor();
   }  
@@ -204,7 +199,7 @@ void resetCursor(){
 }
 
 
-void renderSelection( char* mode) {
+void renderSelection( String mode) {
   if (mode == "adelante") {
     if (selectorIndex < 3) {
       selectorIndex++;

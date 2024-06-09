@@ -1,6 +1,3 @@
-#include <string>
-
-using namespace std;
 
 class RGBColor{
 
@@ -8,9 +5,9 @@ class RGBColor{
         int red;
         int green;
         int blue;
-        string name;
+        String name;
         RGBColor() {};
-        RGBColor(int redValue, int greenValue, int blueValue, string colorName)
+        RGBColor(int redValue, int greenValue, int blueValue, String colorName)
         : red(redValue), green(greenValue),blue(blueValue), name(colorName)
         {}
     };
