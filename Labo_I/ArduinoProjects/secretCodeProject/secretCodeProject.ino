@@ -1,17 +1,39 @@
 #include <LiquidCrystal_I2C.h>
-//#include "secretCode.h"
+#include "codigoSecreto.h"
+#include "colors.h"
+#include "music.h"
 #define BLUEPIN 9
 #define REDPIN 10
 #define GREENPIN 5
 #define POTE A1
-#define BOTON1 3
-#define BOTON2 7
+#define BOTONADEL 4
+#define BOTONATRAS 7
+#define BOTONCONF 3
+#define APRETADO HIGH
+#define NOAPRETADO LOW
+#define ESTADO_INICIO 0
+#define ESTADO_SELECCION 1
+#define ESTADO_CONFIRMACION 2
+#define ESTADO_VICTORIA 3
+#define ESTADO_DERROTA 4
+#define BUZZER 2
+
+//NOTES
+#define NOTE_A6  1760
+#define NOTE_F6  1397
+#define NOTE_C7  2093
+
+
+int estadoActual = ESTADO_INICIO;
 
 char* selectedColor = "";
 int selectorIndex = 0;
+int estadoBotonAdelAnterior =LOW;
+int estadoBotonAtrasAnterior =LOW;
+unsigned long  millisBOTONADEL = 0;
+unsigned long  millisBOTONATRAS = 0;
 
 LiquidCrystal_I2C pantalla(0x27, 16, 2);  //para el display PCF8574 (consultar si es este el que vamso a usar).
-
 
 class RGBColor {
   // El objeto RGBColor tiene los valores de red green y blue.
@@ -39,7 +61,7 @@ public:
     return RGBColor(245, 127, 23, "Orange");
   }
   static class RGBColor Green() {
-    return RGBColor(0, 255, 0, " Green");
+    return RGBColor(0, 255, 0, "Green");
   }
   static class RGBColor Blue() {
     return RGBColor(0, 0, 255, "Blue");
@@ -52,6 +74,65 @@ public:
   }
 };
 
+class SecretCode{
+
+      public:
+        RGBColor code[4];
+        SecretCode(){
+            RGBColor colours[7] = {
+                ColorFactory::Red(),
+                ColorFactory::Green(),
+                ColorFactory::Blue(),
+                ColorFactory::Yellow(),
+                ColorFactory::Orange(),
+                ColorFactory::White(),
+                ColorFactory::Violet()
+
+                };
+
+            for(int i=0; i<4;i++){
+            code[i] = colours[rand() % 7];
+            }
+          }
+        SecretCode(RGBColor colorsArray[]){
+            for(int i=0; i<4;i++){
+                code[i] = colorsArray[i];
+            }
+          }
+};
+
+//Crea la lista de colores del usuario
+RGBColor userCode[4];
+//Si estamos en estado inicio creamos el secretcode
+#if estadoActual == ESTADO_INICIO
+SecretCode machineCode ; 
+#endif
+               
+
+void setEstado(int estado){
+  estadoActual = estado;
+}
+
+
+//FIXME: No me anda acá pero si en CodeBlocks
+char* normalizeColor(char* color){
+  	int counter = 0;
+    char normalized[8];
+    for (size_t i = 0; color[i] != 0; i++){
+    	counter++;
+      	normalized[i] = color[i];
+      if(counter == 8){
+        char* normalizedColor = normalized;
+        return normalizedColor;
+      };
+    };
+    for(int i=counter; i <8; i++){
+      normalized[i]=' ';
+      };
+    char* normalizedColor = normalized;
+    return normalizedColor;
+};
+
 void setColor(RGBColor& color) {
   analogWrite(REDPIN, color.red);
   analogWrite(GREENPIN, color.green);
@@ -59,15 +140,17 @@ void setColor(RGBColor& color) {
   if(selectedColor != color.name){
   selectedColor = color.name;
     pantalla.print(selectedColor);
+    //no puedo normalizar el color
+    //Serial.println(normalizeColor(color.name));
+    userCode[selectorIndex] = color;
     calculateCursor();
-  }
-  
-  
-  
-  
+  }  
 }
 
 void renderColor(int poteInput) {
+  if(estadoActual != ESTADO_SELECCION){
+    return;
+  }
 
   if (poteInput >= 4 && poteInput <= 171) {
     RGBColor color = ColorFactory::White();
@@ -114,6 +197,13 @@ void calculateCursor() {
   }
 }
 
+void resetCursor(){
+  pantalla.setCursor(0,0);
+  selectorIndex = 0;
+  selectedColor = "";
+}
+
+
 void renderSelection( char* mode) {
   if (mode == "adelante") {
     if (selectorIndex < 3) {
@@ -126,8 +216,6 @@ void renderSelection( char* mode) {
   }
   calculateCursor();
 }
-
-
 void setup() {
 
   pantalla.init();       //inicia el display.
@@ -137,26 +225,127 @@ void setup() {
   pinMode(GREENPIN, OUTPUT);
   pinMode(BLUEPIN, OUTPUT);
   pinMode(POTE, INPUT);
-  pinMode(BOTON1, INPUT);
-  pinMode(BOTON2, INPUT);
+  pinMode(BOTONADEL, INPUT);
+  pinMode(BOTONATRAS, INPUT);
+  pinMode(BOTONCONF, INPUT);
   Serial.begin(9600);
 }
 
+//Seteado en 1 para probar
+int intentosPendientes = 1;
+
 void loop() {
+  Serial.println(estadoActual);
+  unsigned long millisActuales = millis();
   int pote = analogRead(POTE);
-  renderColor(pote);
-  int estadoboton1 = digitalRead(BOTON1);
-  int estadoboton2 = digitalRead(BOTON2);
+  
+  int estadoBotonAdel = digitalRead(BOTONADEL);
+  int estadoBotonAtras = digitalRead(BOTONATRAS);
+  int estadoBotonConf = digitalRead(BOTONCONF);
+  
+  //Inicializo para evitar errores en el switch
+  //Se ve que no se pueden inicializar variables dentro
+  //de un switch. Pero sí se pueden modificar
+  SecretCode userSecretCode;
+  switch (estadoActual)
+{
+case ESTADO_INICIO:
+    machineCode = SecretCode();
+    
+    setEstado(ESTADO_SELECCION);
+    break;
+case ESTADO_SELECCION:
+    
 
-  if (estadoboton1 == HIGH) {
-    renderSelection("adelante");
-  }
+    renderColor(pote);
 
-  if (estadoboton2 == HIGH) {
-    renderSelection( "atras");
-  }
+    if ((estadoBotonAdel == APRETADO) && (estadoBotonAdelAnterior == NOAPRETADO)) // BOTONADEL
+    {
+        if ((millisActuales - millisBOTONADEL) >= 10)
+        {
+            renderSelection("adelante");
+            estadoBotonAdelAnterior = estadoBotonAdel;
+        }
+    }
+    else
+    {
+        estadoBotonAdelAnterior = estadoBotonAdel;
+        millisBOTONADEL = millisActuales;
+    }
 
-  pantalla.cursor();
-  delay(200);
-  //pantalla.write('A');
+    if ((estadoBotonAtras == NOAPRETADO) && (estadoBotonAtrasAnterior == APRETADO)) // BOTONATRAS
+    {
+        if ((millisActuales - millisBOTONATRAS) >= 10)
+        {
+            renderSelection("atras");
+            estadoBotonAtrasAnterior = estadoBotonAtras;
+        }
+    }
+    else
+    {
+        estadoBotonAtrasAnterior = estadoBotonAtras;
+        millisBOTONATRAS = millisActuales;
+    }
+    if (estadoBotonConf == HIGH && selectorIndex == 3)
+    {
+        setEstado(ESTADO_CONFIRMACION);
+    }
+    break;
+case ESTADO_CONFIRMACION:
+    // Poner acá la lógica del Juego y terminar con setEstado
+    // correspondiente a reintentar o perder y hacer INTENTOS--
+
+    // Esto lo puse para confirmar que generaba randoms y bien
+    userSecretCode = SecretCode(userCode);
+    for (int i = 0; i < 4; i++)
+    {
+        Serial.print(userSecretCode.code[i].name);
+        Serial.print("=>");
+        Serial.print(machineCode.code[i].name);
+        Serial.println("\n");
+    }
+    delay(1000);
+
+    // Este if deberia verificar la condicion de victoria
+    // Le
+    if (false) // if(victoria...)
+    {
+        setEstado(ESTADO_VICTORIA);
+    }
+    else
+    {
+        if (intentosPendientes > 0)
+        {
+            intentosPendientes--;
+            setEstado(ESTADO_SELECCION);
+        }
+        else
+        {
+            setEstado(ESTADO_DERROTA);
+        }
+    }
+    break;
+    
+case ESTADO_VICTORIA:
+    pantalla.clear();
+    pantalla.print("GANASTE");
+    finalFantasy();
+    pantalla.clear();
+    resetCursor();
+    delay(1000);
+    setEstado(ESTADO_INICIO);
+    break;
+case ESTADO_DERROTA:
+    pantalla.clear();
+    pantalla.print("Perdiste");
+    funeralMarch();
+    pantalla.clear();
+    resetCursor();
+    delay(1000);
+
+    setEstado(ESTADO_INICIO);
+    break;
+}
+
+  
 }
