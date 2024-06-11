@@ -1,0 +1,566 @@
+#include <LiquidCrystal_I2C.h>
+
+#define BLUEPIN 9
+#define REDPIN 10
+#define GREENPIN 5
+#define POTE A1
+#define BOTONADEL 4
+#define BOTONATRAS 7
+#define BOTONCONF 3
+#define APRETADO HIGH
+#define NOAPRETADO LOW
+#define ESTADO_INICIO 0
+#define ESTADO_SELECCION 1
+#define ESTADO_CONFIRMACION 2
+#define ESTADO_VICTORIA 3
+#define ESTADO_DERROTA 4
+#define BUZZER 2
+
+#define CANT_COLORES 4
+#define MAX_INTENTOS 4
+
+//NOTES
+#define NOTE_SILENCE 0
+#define NOTE_A6 1760
+#define NOTE_F6 1397
+#define NOTE_C7 2093
+#define NOTE_DS5 622
+#define NOTE_B4 494
+#define NOTE_CS5 554
+
+// RESULTS
+#define CORRECTO 0
+#define POSICION_INCORRECTA 1
+#define INCORRECTO 2
+
+
+
+int estadoActual = ESTADO_INICIO;
+
+String selectedColor = "";
+int selectorIndex = 0;
+int estadoBotonAdelAnterior = LOW;
+int estadoBotonAtrasAnterior = LOW;
+int estadoBotonConfAnterior = LOW;
+unsigned long millisBOTONADEL = 0;
+unsigned long millisBOTONATRAS = 0;
+unsigned long millisBOTONCONF = 0;
+unsigned long blinkerMillisControl = 0;
+unsigned long blinkerMillis ;
+
+LiquidCrystal_I2C pantalla(0x27, 16, 2);  //para el display PCF8574 (consultar si es este el que vamos a usar).
+
+
+String normalizeString(String color){
+  	int counter = 0;
+    String normalized;
+    for (size_t i = 0; color[i] != 0; i++){
+    	counter++;
+      	normalized += color[i];
+      if(counter == 8){
+         return normalized;
+      };
+    };
+    for(int i=counter; i <8; i++){
+      normalized +=' ';
+      };
+     return normalized;
+};
+
+class RGBColor {
+  // El objeto RGBColor tiene los valores de red green y blue.
+public:
+  int red;
+  int green;
+  int blue;
+  String name;
+  RGBColor(){};
+  RGBColor(int redValue, int greenValue, int blueValue, String colorName)
+    : red(redValue), green(greenValue), blue(blueValue), name(colorName) {}
+};
+
+
+//Crea la lista de colores del usuario
+RGBColor userInput[CANT_COLORES];
+
+class ColorFactory {
+  //Funciones que retornan el color en rgb
+public:
+  static class RGBColor Yellow() {
+    return RGBColor(255, 235, 59, "Yellow");
+  }
+  static class RGBColor White() {
+    return RGBColor(250, 250, 250, "White");
+  }
+  static class RGBColor Orange() {
+    return RGBColor(245, 127, 23, "Orange");
+  }
+  static class RGBColor Green() {
+    return RGBColor(0, 255, 0, "Green");
+  }
+  static class RGBColor Blue() {
+    return RGBColor(0, 0, 255, "Blue");
+  }
+  static class RGBColor Red() {
+    return RGBColor(255, 0, 0, "Red");
+  }
+  static class RGBColor Violet() {
+    return RGBColor(120, 40, 140, "Violet");
+  }
+};
+
+
+class SecretCode {
+public:
+  RGBColor code[4];
+  SecretCode() {
+    RGBColor colours[7] = {
+      ColorFactory::Red(),
+      ColorFactory::Green(),
+      ColorFactory::Blue(),
+      ColorFactory::Yellow(),
+      ColorFactory::Orange(),
+      ColorFactory::White(),
+      ColorFactory::Violet()
+
+    };
+
+    for (int i = 0; i < 4; i++) {
+      code[i] = colours[random(1,17) % 7];
+    }
+  }
+  SecretCode(RGBColor colorsArray[]) {
+    for (int i = 0; i < 4; i++) {
+      code[i] = colorsArray[i];
+    }
+  }
+
+  /*
+        Compara los colores ingresados con los colores a adivinar y devuelve por parametro un array con el estado de cada uno.
+        'resultado' tiene que tener espacio para CANT_COLORES elementos.
+        */
+  static void verificar_aciertos(RGBColor colores_a_adivinar[], RGBColor colores_ingresados[], int* resultado) {
+    int flags[CANT_COLORES] = { INCORRECTO, INCORRECTO, INCORRECTO };
+
+    // Primera recorrida para chequear los colores que estan en la posicion correcta
+    for (int i = 0; i < CANT_COLORES; i++) {
+      if (colores_ingresados[i].name == colores_a_adivinar[i].name) {
+        resultado[i] = CORRECTO;
+      } else {
+        resultado[i] = INCORRECTO;  // Cargo INCORRECTO por defecto para evitar valores basura
+      }
+    }
+
+    // Segunda recorrida para chequear los colores que estan en una posicion incorrecta
+    for (int cont_input = 0; cont_input < CANT_COLORES; cont_input++) {
+      if (resultado[cont_input] != CORRECTO) {
+        for (int cont_respuesta = 0; cont_respuesta < CANT_COLORES; cont_respuesta++) {
+          if (flags[cont_respuesta] != POSICION_INCORRECTA && resultado[cont_input] != POSICION_INCORRECTA && resultado[cont_respuesta] != CORRECTO) {
+
+            if (colores_a_adivinar[cont_respuesta].name == colores_ingresados[cont_input].name) {
+              flags[cont_respuesta] = POSICION_INCORRECTA;
+              resultado[cont_input] = POSICION_INCORRECTA;
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Devuelve true si el jugador acertó todos los colores, y false en caso contrario
+  static bool verificar_victoria(int resultado[]) {
+    for (int i = 0; i < CANT_COLORES; i++) {
+      if (resultado[i] != CORRECTO) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  static void imprimir_resultado(int resultado[], RGBColor userInput[]) {
+    pantalla.clear();
+    
+    
+    for (int i = 0; i < CANT_COLORES; i++) {
+      selectorIndex = i;
+      calculateCursor();
+      String analysis = userInput[i].name;
+      switch (resultado[i]) {
+        case CORRECTO:
+	        analysis.concat(" O");
+          pantalla.print(normalizeString(analysis));
+          break;
+        case POSICION_INCORRECTA:
+        	analysis.concat(" X");
+          pantalla.print(normalizeString(analysis));
+          break;
+        case INCORRECTO:
+	        analysis.concat(" -");
+          pantalla.print(normalizeString(analysis));
+          break;
+      }
+    }
+    delay(3000);
+    pantalla.clear();
+    resetCursor();
+  }
+
+  void printCode() {
+    Serial.print('[');
+    Serial.print(this->code[0].name);
+    Serial.print(", ");
+
+    int i = 1;
+    while (i < CANT_COLORES - 1) {
+      Serial.print(this->code[i].name);
+      Serial.print(", ");
+      i++;
+    }
+    Serial.print(this->code[i].name);
+    Serial.println(']');
+  }
+
+  void showCode() {
+    for(int i=0;i < CANT_COLORES; i++) {
+      selectorIndex = i;
+      calculateCursor();
+      pantalla.print(normalizeString(this->code[i].name));
+    }
+    delay(4000);
+    pantalla.clear();
+  }
+};
+
+
+
+void setEstado(int estado) {
+  estadoActual = estado;
+}
+
+
+
+
+void setColor(RGBColor& color) {
+  analogWrite(REDPIN, color.red);
+  analogWrite(GREENPIN, color.green);
+  analogWrite(BLUEPIN, color.blue);
+  if (selectedColor != color.name) {
+    selectedColor = color.name;
+    userInput[selectorIndex] = color;
+    pantalla.print(normalizeString(selectedColor));
+    calculateCursor();
+  }
+}
+
+
+void renderColor(int poteInput) {
+  if(estadoActual != ESTADO_SELECCION){
+    return;
+  }
+
+  if (poteInput >= 4 && poteInput <= 171) {
+    RGBColor color = ColorFactory::White();
+    setColor(color);
+
+  } else if (poteInput > 171 && poteInput <= 341) {
+    RGBColor color = ColorFactory::Yellow();
+    setColor(color);
+  } else if (poteInput > 341 && poteInput <= 511) {
+    RGBColor color = ColorFactory::Orange();
+    setColor(color);
+  } else if (poteInput > 511 && poteInput <= 681) {
+    RGBColor color = ColorFactory::Red();
+    setColor(color);
+  } else if (poteInput > 681 && poteInput <= 851) {
+    RGBColor color = ColorFactory::Blue();
+    setColor(color);
+  } else if (poteInput > 851 && poteInput <= 1021) {
+    RGBColor color = ColorFactory::Green();
+    setColor(color);
+  } else if (poteInput > 1021 && poteInput <= 1023) {
+    RGBColor color = ColorFactory::Violet();
+    setColor(color);
+  }
+}
+
+void blinkScreen(){
+  switch(selectorIndex){
+  case 0:
+    pantalla.setCursor(0, 0);
+    break;
+  case 1:
+    pantalla.setCursor(8, 0);
+    break;
+  case 2:
+    pantalla.setCursor(0, 1);
+    break;
+  case 3:
+    pantalla.setCursor(8, 1);
+    break;
+  }
+  pantalla.blink();
+  if(blinkerMillis - blinkerMillisControl >= 10){
+    pantalla.noBlink();
+
+    blinkerMillisControl = blinkerMillis;
+ }
+}
+
+void calculateCursor() {
+  //IMPLEMENTAR CON MILLIS
+  switch (selectorIndex) {
+    case 0:
+    
+      pantalla.setCursor(0, 0);
+      selectedColor = "";
+    	blinkScreen();
+      break;
+    case 1:
+
+      pantalla.setCursor(8, 0);
+    selectedColor = "";
+    blinkScreen();
+
+      break;
+    case 2:
+      pantalla.setCursor(0, 1);
+      selectedColor = "";
+    blinkScreen();
+      break;
+    case 3:
+      pantalla.setCursor(8, 1);
+      selectedColor = "";
+    blinkScreen();
+      break;
+  }
+}
+
+void resetCursor() {
+  pantalla.setCursor(0, 0);
+  selectorIndex = 0;
+  selectedColor = "";
+}
+
+
+void renderSelection(String mode) {
+  if (mode == "adelante") {
+    if (selectorIndex < 3) {
+      selectorIndex++;
+    }
+  } else if (mode == "atras") {
+    if (selectorIndex > 0) {
+      selectorIndex--;
+    }
+  }
+  calculateCursor();
+}
+
+void funeralMarch() {
+  int funeralMelody[] = {
+    NOTE_A6, NOTE_A6, NOTE_A6, NOTE_F6, NOTE_A6, NOTE_A6, NOTE_F6, NOTE_A6,
+    NOTE_A6, NOTE_F6, NOTE_C7, NOTE_A6, NOTE_F6, NOTE_C7, NOTE_A6
+  };
+
+  int funeralNoteDurations[] = {
+    4, 8, 4, 4, 8, 4, 4, 8,
+    4, 4, 4, 4, 8, 4, 4
+  };
+
+
+  int melodyLength = sizeof(funeralMelody) / sizeof(int);
+
+  for (int thisNote = 0; thisNote < melodyLength; thisNote++) {
+    int noteDuration = 1000 / funeralNoteDurations[thisNote];
+    tone(BUZZER, funeralMelody[thisNote], noteDuration);
+    int pauseBetweenNotes = noteDuration * 1.30;
+    delay(pauseBetweenNotes);
+    noTone(BUZZER);
+  }
+}
+void finalFantasy() {
+  int melody[] = {
+    NOTE_DS5, NOTE_DS5, NOTE_DS5, NOTE_DS5, NOTE_B4,
+    NOTE_CS5, NOTE_DS5, NOTE_SILENCE, NOTE_CS5, NOTE_DS5
+  };
+
+  // Duraciones de las notas: 4 = negra, 8 = corchea, etc.
+  int noteDurations[] = {
+    16, 16, 4, 4, 8,
+    4, 16, 8, 8, 1
+  };
+
+  for (int thisNote = 0; thisNote < 10; thisNote++) {
+    int noteDuration = 1500 / noteDurations[thisNote];
+
+    // Si la nota no es un silencio, toca la nota
+    if (melody[thisNote] != NOTE_SILENCE) {
+      tone(BUZZER, melody[thisNote], noteDuration);
+    }
+
+    // Espera la duración de la nota
+    delay(noteDuration);
+
+    // Detiene el tono después de la duración de la nota
+    noTone(BUZZER);
+
+    // Pausa entre notas para mejorar la separación
+    int pauseBetweenNotes = noteDuration * 0.30;
+    delay(pauseBetweenNotes);
+  }
+}
+bool allColorsSelected(RGBColor colorList[]){
+  for(int i =0; i < CANT_COLORES;i++){
+    if(colorList[i].name == ""){
+       return false;
+    }
+  }
+       return true;
+}
+void setup() {
+
+  pantalla.init();       //inicia el display.
+  pantalla.backlight();  //prende los leds del display.
+
+  pinMode(REDPIN, OUTPUT);
+  pinMode(GREENPIN, OUTPUT);
+  pinMode(BLUEPIN, OUTPUT);
+  pinMode(POTE, INPUT);
+  pinMode(BOTONADEL, INPUT);
+  pinMode(BOTONATRAS, INPUT);
+  pinMode(BOTONCONF, INPUT);
+  randomSeed(analogRead(A0));
+
+  Serial.begin(9600);
+}
+
+
+//Si estamos en estado inicio creamos el secretcode
+#if estadoActual == ESTADO_INICIO
+SecretCode machineCode;
+#endif
+
+SecretCode userSecretCode;
+
+unsigned int intento = 1;
+
+int resultado[4];
+bool victoria = false;
+
+void loop() {
+  unsigned long millisActuales = millis();
+  blinkerMillis = millis();
+  int pote = analogRead(POTE);
+
+  int estadoBotonAdel = digitalRead(BOTONADEL);
+  int estadoBotonAtras = digitalRead(BOTONATRAS);
+  int estadoBotonConf = digitalRead(BOTONCONF);
+  bool ready = false;
+  //Inicializo para evitar errores en el switch
+  //Se ve que no se pueden inicializar variables dentro
+  //de un switch. Pero sí se pueden modificar
+
+  switch (estadoActual) {
+    case ESTADO_INICIO:
+      machineCode = SecretCode();
+      machineCode.printCode();
+
+      setEstado(ESTADO_SELECCION);
+      break;
+    
+    case ESTADO_SELECCION:
+
+      renderColor(pote);
+
+      if ((estadoBotonAdel == APRETADO) && (estadoBotonAdelAnterior == NOAPRETADO))  // BOTONADEL
+      {
+        if ((millisActuales - millisBOTONADEL) >= 10) {
+          renderSelection("adelante");
+          estadoBotonAdelAnterior = estadoBotonAdel;
+        }
+      } else {
+        estadoBotonAdelAnterior = estadoBotonAdel;
+        millisBOTONADEL = millisActuales;
+      }
+
+      if ((estadoBotonAtras == NOAPRETADO) && (estadoBotonAtrasAnterior == APRETADO))  // BOTONATRAS
+      {
+        if ((millisActuales - millisBOTONATRAS) >= 10) {
+          renderSelection("atras");
+          estadoBotonAtrasAnterior = estadoBotonAtras;
+        }
+      } else {
+        estadoBotonAtrasAnterior = estadoBotonAtras;
+        millisBOTONATRAS = millisActuales;
+      }
+    if ((estadoBotonConf == APRETADO) && (estadoBotonConfAnterior == NOAPRETADO) && allColorsSelected(userInput))  // BOTONADEL
+      {
+        if ((millisActuales - millisBOTONCONF) >= 10) {
+          setEstado(ESTADO_CONFIRMACION);
+          estadoBotonConfAnterior = estadoBotonConf;
+        }
+      } else {
+        estadoBotonConfAnterior = estadoBotonConf;
+        millisBOTONCONF = millisActuales;
+      }
+      break;
+    
+    case ESTADO_CONFIRMACION:
+      userSecretCode = SecretCode(userInput);
+      SecretCode::verificar_aciertos(machineCode.code, userSecretCode.code, resultado);
+      SecretCode::imprimir_resultado(resultado, userInput);
+      victoria = SecretCode::verificar_victoria(resultado);
+      if (victoria) {
+        setEstado(ESTADO_VICTORIA);
+      } else {
+        if (intento < MAX_INTENTOS) {
+          
+          pantalla.clear();
+          pantalla.print("Te quedan: ");
+          pantalla.print( String(MAX_INTENTOS - intento) );
+          pantalla.setCursor(0,1);
+          pantalla.print("intentos");
+          intento++;
+          
+          
+          while(!ready){
+            int confirm = digitalRead(BOTONCONF);
+            if(confirm == HIGH){
+              pantalla.clear();
+              resetCursor();
+              ready = true;
+              userInput[3].name = "";
+              break;
+           	}
+          }
+          setEstado(ESTADO_SELECCION);
+        } 
+        else {
+          setEstado(ESTADO_DERROTA);
+        }
+      }
+      break;
+
+    case ESTADO_VICTORIA:
+      pantalla.clear();
+      pantalla.print("GANASTE");
+      finalFantasy();
+      pantalla.clear();
+      resetCursor();
+      delay(2000);
+      setEstado(ESTADO_INICIO);
+      intento = 1;
+      break;
+    
+    case ESTADO_DERROTA:
+      pantalla.clear();
+      pantalla.print("Perdiste");
+      funeralMarch();
+      pantalla.clear();
+      machineCode.showCode();
+      intento = 1;
+      resetCursor();
+    	setEstado(ESTADO_INICIO);
+      break;
+  }
+}
