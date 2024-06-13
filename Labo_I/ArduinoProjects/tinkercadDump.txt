@@ -592,7 +592,7 @@ void loop()
     }
     else
     {
-      if (intento <= MAX_INTENTOS)
+      if (intento < MAX_INTENTOS)
       {
 
         pantalla.clear();
