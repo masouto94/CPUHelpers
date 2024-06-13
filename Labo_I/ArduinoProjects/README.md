@@ -52,12 +52,22 @@ Otras funciones útiles definidas en la clase son:
 Hay además otras funciones que sirven para manejar diferentes partes del programa
 
 `setEstado`: Setea el estado actual al estado provisto
+
 `setColor`: Envia la señal correspondiente al led y setea el color elegido en el lugar correspondiente de la lista del usuario (segun el `selectorIndex`)
+
 `renderColor`: Decide el color a setear según el valor del potenciómetro
+
 `blinkScreen`: Marca titilando la posición del cursor en el momento 
+
 `calculateCursor`: Debido a que la pantalla la dividimos en cuatro cuadrantes y el LCD es 2x16, definimos 4 índices para setear el cursor. Esta función lee el valor de `selectorIndex` y pone el cursor en el lugar correspondiente
+
 `resetCursor`: Resetea el cursor,`selectorIndex`, y la selección del color a 0
+
 `normalizeString`: Completa el valor del string provisto hasta lograr 8 caracteres
+
 `renderSelection`: Muestra en pantalla el color elegido habiendo normalizado su largo
+
 `funeralMarch`: Contiene la secuencia para la música al perder
+
 `finalFantasy`: Contiene la secuencia para la música al ganar
+
