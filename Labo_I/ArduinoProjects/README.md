@@ -20,7 +20,7 @@ Después de unos segundos, mostrará la cantidad de intentos restantes. El jugad
 ## Estados
 **ESTADO_INICIO**: la máquina elige el código aleatoriamente.
 
-**ESTADO_SELECCION**: espera que el usuario ingrese los inputs (colores) y que confirme.
+**ESTADO_SELECCION**: espera que el usuario ingrese los inputs (colores) y que confirme. Tiene un limite de 60 segundos o se va a considerar timeout y pasar a `ESTADO_DERROTA`
 
 **ESTADO_CONFIRMACION**: verifica aciertos e imprime resultados. Verifica victoria.
 
