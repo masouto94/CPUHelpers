@@ -105,6 +105,7 @@ void setup()
 {
   pantalla.init();      // inicia el display.
   pantalla.backlight(); // prende los leds del display.
+  pinMode(BUZZER, OUTPUT);
   pinMode(REDPIN, OUTPUT);
   pinMode(GREENPIN, OUTPUT);
   pinMode(BLUEPIN, OUTPUT);
